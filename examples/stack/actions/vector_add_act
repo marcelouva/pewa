@@ -1,0 +1,23 @@
+pred pre_add[values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{}
+
+pred pos_add[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  e: JavaPrimitiveIntegerValue,  e': JavaPrimitiveIntegerValue, 
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  return_bool:boolean
+]
+{
+ sequence[values] and myseq_card[values,size] and  values'=values+(size->e) and
+  pred_java_primitive_integer_value_add[size,i321,size',false] and vac'=false and 
+  pred_java_primitive_integer_value_eq[e,e'] and return_bool=true
+}
+
+
+
+act vector_add_action[/*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_bool:boolean] {  
+   pre { pre_add[thisType_1] }
+   post { pos_add[vac,vac',size,size',intJ_1,intJ_1',thisType_1,thisType_1',return_bool'] }
+}/*scope:1*/
+

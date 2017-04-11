@@ -1,0 +1,60 @@
+pred postcondition_setsize
+[i:JavaPrimitiveIntegerValue,i':JavaPrimitiveIntegerValue,vac:boolean,vac':boolean,size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue, values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values': JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{
+
+ pred_java_primitive_integer_value_eq[i,i'] and 
+  myseq_card[values,size] and 
+ pred_java_primitive_integer_value_eq[i,size'] and 
+ (pred_java_primitive_integer_value_eq[i,i320] implies vac'=true) and 
+ (pred_java_primitive_integer_value_gt[i,i320] implies vac'=false) and
+
+
+(pred_java_primitive_integer_value_eq[i,size] implies values=values') and 
+
+
+ ((pred_java_primitive_integer_value_lt[i,size]  and  pred_java_primitive_integer_value_gt_zero[i]) 
+implies 
+(
+   values' in values  and 
+
+all j: values.JavaPrimitiveIntegerValue |
+   
+      
+    (pred_java_primitive_integer_value_lt[j,i] implies  (j in values'.JavaPrimitiveIntegerValue)) and 
+    (pred_java_primitive_integer_value_gte[j,i] implies  not (j in values'.JavaPrimitiveIntegerValue)) 
+)
+)
+
+and
+
+(pred_java_primitive_integer_value_gt[i,size] implies 
+(
+(all p:JavaPrimitiveIntegerValue |(pred_java_primitive_integer_value_gte[p,size] and  pred_java_primitive_integer_value_lt[p,i])
+implies p->Null in values') 
+ and values in values' and 
+(let dom = values.JavaPrimitiveIntegerValue | values' - (dom->Null) = values'  )
+
+
+
+)
+)
+}
+
+
+
+
+
+pred precondition_setsize
+[v:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),i:JavaPrimitiveIntegerValue]{
+sequence[v] and pred_java_primitive_integer_value_gte[i,i320]
+}
+
+act vector_setsize_action
+[/*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  pre {
+   precondition_setsize[thisType_1,intJ_1]
+}
+   post {
+   postcondition_setsize[intJ_1,intJ_1',vac,vac',size,size',thisType_1,thisType_1']
+
+}}/*scope:0*/

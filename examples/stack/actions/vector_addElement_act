@@ -1,0 +1,19 @@
+pred pre_add_element[]{}
+
+pred pos_add_element[
+  e: JavaPrimitiveIntegerValue,e':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  vac:boolean,vac':boolean]
+{
+  sequence[values] and 
+  myseq_card[values,size] and  values'=values+(size->e) and
+  pred_java_primitive_integer_value_add[size,i321,size',false] and vac'=false
+}
+
+act vector_addElement_action[/*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/vac:boolean] {  
+   pre { pre_add_element[] }
+   post { pos_add_element[intJ_1,intJ_1',thisType_1,thisType_1',size,size',vac,vac'] }
+}/*scope:1*/
+
+

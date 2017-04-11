@@ -1,0 +1,34 @@
+pred postcondition_Lista_remove_fo2
+[ size:JavaPrimitiveIntegerValue, size':JavaPrimitiveIntegerValue, 
+  elem: JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: boolean,
+  vac:boolean,
+  vac':boolean]
+{  (pred_java_primitive_integer_value_eq[size',i320] implies vac'=true) and 
+   (pred_java_primitive_integer_value_neq[size',i320] implies vac'=false) and 
+
+   myseq_card[values,size] and sequence[values] and sequence[values'] and
+   (((no values.elem)  and ret=false and values=values' and pred_java_primitive_integer_value_eq[size',size]) 
+    or
+
+   
+   (ret=true and pred_java_primitive_integer_value_add[size',i321,size,false]  and 
+   (some i :JavaPrimitiveIntegerValue |
+	    (i->elem) in values and 
+            (all a,b:JavaPrimitiveIntegerValue | (a->b) in values  implies (
+        	( pred_java_primitive_integer_value_lt[a,i]  implies (a->b) in values'  and   pred_java_primitive_integer_value_neq[b,elem])    and
+		( pred_java_primitive_integer_value_lt[i,a]  implies ((fun_java_primitive_integer_value_sub[a,i321])->b) in values')) 
+                                    ))))
+}
+
+
+pred precondition_Lista_remove_fo2
+[]{ }
+
+act vector_remove_action[/*inout*/size:JavaPrimitiveIntegerValue,/*in*/intJ_1: JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_bool: boolean,/*inout*/vac: boolean] {  
+    pre { precondition_Lista_remove_fo2[] }
+    post { postcondition_Lista_remove_fo2[size,size',intJ_1,thisType_1,thisType_1',return_bool',vac,vac'] }
+}/*scope:1*/
+

@@ -1,0 +1,3 @@
+Notas
+
+* Los parametros de las acciones deben tener un prefijo que puede ser /*in*/,/*inout*/o /*inout*/. Es permite el generador de código agregar algunas acciones automáticamente: el prefijo /*in*/ ejecuta una acción que genera un valor entero para el parámetro correspondiente inmediatamente antes de que se invoque a esta acción. el prefijo /*out*/ indica que este parámetro es uno de retorno, por lo setea a una variable global indicando que se se encuentra un valor booleano o entero válido previamente dependiendo del tipo del parámetro de salida.

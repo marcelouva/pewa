@@ -1,0 +1,35 @@
+pred postcondition_stack_search 
+[
+  size:JavaPrimitiveIntegerValue,
+  size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,
+  values':JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,
+  v: JavaPrimitiveIntegerValue,
+  ret: JavaPrimitiveIntegerValue
+]
+{
+
+    sequence[values]  and values'=values and
+
+   (( some i:JavaPrimitiveIntegerValue | i->v  in values and pred_java_primitive_integer_value_eq[ret,i]) or
+   ( no values.v   and  pred_java_primitive_integer_value_eq[ret,i32m1]))
+    and 
+     myseq_card[values,size] and pred_java_primitive_integer_value_eq[size,size']
+ 
+} 
+
+
+pred precondition_stack_search
+[
+  thisType_1:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue
+]
+{      
+    sequence[thisType_1] 
+}
+
+act search[/*out*/return_intJ_1: JavaPrimitiveIntegerValue, 
+	 /*in*/size:JavaPrimitiveIntegerValue,intJ_1: JavaPrimitiveIntegerValue,
+         /*inout*/thisType_1:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue] {  
+    pre { precondition_stack_search[thisType_1] }  
+    post { postcondition_stack_search[size,size',thisType_1,thisType_1',intJ_1,return_intJ_1'] }
+}/*scope:0*/ 

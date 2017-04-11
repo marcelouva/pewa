@@ -1,0 +1,26 @@
+pred postcondition_Lista_isEmpty 
+[
+ size:JavaPrimitiveIntegerValue,
+  size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,
+  values':JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,
+  return_bool: boolean 
+]
+{   
+     equ[return_bool, true] iff no values
+     values=values'
+     myseq_card[values,size] and pred_java_primitive_integer_value_eq[size,size']
+}
+
+
+pred precondition_Lista_isEmpty
+[ values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]{
+sequence[values]
+}
+
+act stack_empty_action[/*out*/return_bool:boolean,/*inout*/size:JavaPrimitiveIntegerValue,thisType_1:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue] {  
+    pre { precondition_Lista_isEmpty[thisType_1] }
+    post { postcondition_Lista_isEmpty[size,size',thisType_1,thisType_1',return_bool'] 
+}}/*scope:0*/
+
+

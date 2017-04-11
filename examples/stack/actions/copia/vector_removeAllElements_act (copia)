@@ -1,0 +1,22 @@
+pred postcondition_removeallelements
+[size':JavaPrimitiveIntegerValue, values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,values': JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]
+{ no values'
+   and pred_java_primitive_integer_value_eq[size',i320]
+
+
+}
+
+pred precondition_removeallelements
+[v: JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]{
+sequence[v]
+}
+
+act vector_removeallelements_action
+[/*inout*/size:JavaPrimitiveIntegerValue,thisType_1:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]
+{  pre {
+   precondition_removeallelements[thisType_1]
+}
+   post {
+   postcondition_removeallelements[size',thisType_1,thisType_1']
+
+}}/*scope:0*/

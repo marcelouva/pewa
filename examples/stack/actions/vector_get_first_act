@@ -1,0 +1,24 @@
+pred postcondition_Lista_get_first 
+[
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue
+]
+{
+   sequence[values] and values'=values and
+   pred_java_primitive_integer_value_eq[ret,values[i320]] and 
+   pred_java_primitive_integer_value_eq[size,size']
+} 
+
+
+pred precondition_Lista_get_first
+[
+  thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{  sequence[thisType_1] and not (no thisType_1)}
+
+act get_first[/*out*/return_intJ_1: JavaPrimitiveIntegerValue, /*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/size:JavaPrimitiveIntegerValue] {  
+    pre { precondition_Lista_get_first[thisType_1] }
+    post { postcondition_Lista_get_first[thisType_1,thisType_1',return_intJ_1',size,size'] }
+}/*scope:0*/ 

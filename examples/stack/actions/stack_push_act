@@ -1,0 +1,30 @@
+pred precondition_stack_push[values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{
+sequence[values] 
+}
+
+pred postcondition_stack_push[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  e: JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret:JavaPrimitiveIntegerValue
+]
+{
+ sequence[values] and pred_java_primitive_integer_value_eq[size,size'] and
+ myseq_card[values,size] and  values'=values+(size->e) and
+ pred_java_primitive_integer_value_add[size,i321,size',false] and vac'=false and 
+ pred_java_primitive_integer_value_eq[ret,e]
+}
+
+
+
+act stack_push_action[
+  /*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/intJ_2:JavaPrimitiveIntegerValue,
+  /*inout*/vac:boolean, 
+  /*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_Jint_1:JavaPrimitiveIntegerValue] {  
+   pre { precondition_stack_push[thisType_1] }
+   post { postcondition_stack_push[vac,vac',size,size',intJ_1,thisType_1,thisType_1',return_Jint_1'] }
+}/*scope:1*/
+
+

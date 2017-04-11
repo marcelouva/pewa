@@ -1,0 +1,33 @@
+pred precondition_retainall[]{}
+
+pred postcondition_retainall[
+  intJ_1: JavaPrimitiveIntegerValue,
+  values_p:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,
+  values':JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue
+]
+{
+  sequence[values] and sequence[values_p] and sequence[values'] and //puede dar una pila distinta ver
+  JavaPrimitiveIntegerValue.values'= JavaPrimitiveIntegerValue.values_p & JavaPrimitiveIntegerValue.values 
+
+
+  (some size:JavaPrimitiveIntegerValue | myseq_card[values,size] and  values'=values+(size->intJ_1))
+}
+
+
+
+act retainall[
+  /*in*/intJ_1:JavaPrimitiveIntegerValue, 
+  /*inout*/thisType_1:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue] {  
+   pre { precondition_retainall[] }
+   post { postcondition_retainall[intJ_1,thisType_1,thisType_1'] }
+}/*scope:1*/
+
+
+
+
+
+
+
+
+

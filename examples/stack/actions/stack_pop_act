@@ -1,0 +1,38 @@
+pred precondition_stack_pop
+[vac:boolean,values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{    
+  sequence[values] and vac=false
+}
+
+
+
+
+
+pred postcondition_stack_pop 
+[ vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue
+]
+{
+
+myseq_card[values,size] and pred_java_primitive_integer_value_add[size',i321,size,false] and 
+
+(some a:JavaPrimitiveIntegerValue |  a=int32_max[values.JavaPrimitiveIntegerValue] and values'=values-(a->ret) and (a->ret) in values and 
+                                     pred_java_primitive_integer_value_eq[ret,a.values]) 
+
+
+and (pred_java_primitive_integer_value_eq[size',i320] implies vac'=true)
+and (pred_java_primitive_integer_value_neq[size',i320] implies vac'=false)
+}
+
+
+act stack_pop_action
+[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/return_Jint_1: JavaPrimitiveIntegerValue]{  
+    pre { precondition_stack_pop[vac,thisType_1] }
+    post { postcondition_stack_pop[vac,vac',size,size',thisType_1,thisType_1',return_Jint_1'] }
+}/*scope:1*/
+
+
+
+
+

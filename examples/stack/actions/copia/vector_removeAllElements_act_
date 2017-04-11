@@ -1,0 +1,16 @@
+pred postcondition_TSroe
+[values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,values': JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]
+{ no values'}
+
+pred precondition_TSroe
+[v: JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]{}
+
+act vector_removeAllElements
+[/*inout*/thisType_1:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]
+{  pre {
+   precondition_TSroe[thisType_1]
+}
+   post {
+   postcondition_TSroe[thisType_1,thisType_1']
+
+}}/*scope:0*/

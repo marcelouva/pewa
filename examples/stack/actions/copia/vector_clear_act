@@ -1,0 +1,22 @@
+pred postcondition_clear
+[size':JavaPrimitiveIntegerValue, values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,values': JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]
+{  pred_java_primitive_integer_value_eq[size',i320] 
+   and no values'
+
+
+}
+
+pred precondition_clear
+[v: JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]{
+sequence[v]
+}
+
+act vector_clear_action
+[/*inout*/size:JavaPrimitiveIntegerValue,thisType_1:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]
+{  pre {
+   precondition_clear[thisType_1]
+}
+   post {
+   postcondition_clear[size',thisType_1,thisType_1']
+
+}}/*scope:0*/

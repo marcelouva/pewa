@@ -1,0 +1,33 @@
+pred pre_size[]{}
+
+pred pos_size [vac:boolean,vac':boolean,
+   size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+   return_int':JavaPrimitiveIntegerValue, 
+   values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{ 
+
+  sequence[values] and values'=values and vac=vac' and 
+  myseq_card[values,return_int'] and 
+  pred_java_primitive_integer_value_eq[size,return_int'] and 
+  pred_java_primitive_integer_value_eq[size,size'] 
+}
+
+
+act vector_size_action
+[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*out*/return_Jint_1:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  pre {
+   pre_size[]
+}
+   post {
+   pos_size[vac,vac',size,size',return_Jint_1',thisType_1,thisType_1']
+}}/*scope:0*/
+
+
+
+
+
+
+
+
+
+

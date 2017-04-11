@@ -1,0 +1,21 @@
+pred postcondition_le[size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue]
+{
+  sequence[values] and values'=values and pred_java_primitive_integer_value_eq[size,size'] and
+  myseq_card[values,size] and ret=values[fun_java_primitive_integer_value_sub[size,i321]]
+}
+
+
+pred precondition_le[thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{      
+    sequence[thisType_1] and not (no thisType_1)
+}
+
+
+act vector_lastElement_action[/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_Jint_1: JavaPrimitiveIntegerValue] {  
+    pre { precondition_le[thisType_1] }
+    post { postcondition_le[size,size',thisType_1,thisType_1,return_Jint_1'] }
+}/*scope:0*/
+
+

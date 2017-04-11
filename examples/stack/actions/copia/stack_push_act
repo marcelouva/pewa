@@ -1,0 +1,30 @@
+pred precondition_stack_push[  values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]{
+sequence[values]
+}
+
+pred postcondition_stack_push[
+  size:JavaPrimitiveIntegerValue,
+  size':JavaPrimitiveIntegerValue,
+  b: JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,
+  values':JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue
+]
+{
+
+
+
+myseq_card[values,size] and pred_java_primitive_integer_value_add[size,i321,size',false] and values'=values+(size->b)
+
+
+}
+
+
+
+act stack_push_action[
+  /*in*/intJ_1:JavaPrimitiveIntegerValue, 
+  /*inout*/size:JavaPrimitiveIntegerValue,thisType_1:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue] {  
+   pre { precondition_stack_push[thisType_1] }
+   post { postcondition_stack_push[size,size',intJ_1,thisType_1,thisType_1'] }
+}/*scope:1*/
+
+

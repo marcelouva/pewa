@@ -1,0 +1,25 @@
+pred pre_assign_bool[a: boolean]{
+a=true
+}
+
+pred pos_assign_bool[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  a: boolean,a': boolean,
+  ret: boolean,ret':boolean,
+  valid: boolean,valid':boolean,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{
+  values=values' and size=size' and vac=vac' and valid=valid' and ret=ret' and a'= ret' 
+}
+
+
+
+act assign_bool_action[
+  /*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout||*/bool_1:boolean,/*inout*/return_bool:boolean,/*inout*/valid_bool:boolean,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+   pre { pre_assign_bool[valid_bool] }
+   post { pos_assign_bool[vac,vac',size,size',bool_1,bool_1',return_bool,return_bool',valid_bool,valid_bool',thisType_1,thisType_1'] }
+}/*scope:1*/
+
+

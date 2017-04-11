@@ -1,0 +1,28 @@
+// accion que asigna el parametro de retorno generado por alguna otra accion previa al parametro entero 2
+
+
+pred pre_assign_intJ2[a: boolean]{
+a=true
+}
+
+pred pos_assign_intJ2[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  a: JavaPrimitiveIntegerValue,a': JavaPrimitiveIntegerValue,
+  ret: JavaPrimitiveIntegerValue,ret':JavaPrimitiveIntegerValue,
+  valid: boolean,valid':boolean,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{
+  values=values' and size=size' and vac=vac' and valid=valid' and ret=ret' and a'= ret' 
+}
+
+
+
+act assign_int2_action[
+  /*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/return_Jint_1:JavaPrimitiveIntegerValue,/*inout*/valid_intJ:boolean,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+   pre { pre_assign_intJ[valid_intJ] }
+   post { pos_assign_intJ[vac,vac',size,size',intJ_2,intJ_2',return_Jint_1,return_Jint_1',valid_intJ,valid_intJ',thisType_1,thisType_1'] }
+}/*scope:1*/
+
+

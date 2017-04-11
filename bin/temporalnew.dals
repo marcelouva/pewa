@@ -1,0 +1,1201 @@
+//-------------- prelude--------------//
+module moduleId 
+
+open Integer32 
+open util/sequniv as sequniv 
+
+fun fun_reach[h: univ, 
+              type: set univ, 
+              field: univ -> univ
+]: set univ { 
+  h.*(field & type->(type+null)) & type 
+}
+
+one sig Null{}
+
+abstract sig char {} 
+
+abstract sig Exception{}
+one sig E1 extends Exception{} 
+
+
+fun shl[l,r: Int]: Int { l << r } 
+fun sshr[l,r: Int]: Int { l >> r } 
+fun ushr[l,r: Int]: Int { l >>> r } 
+
+fun fun_univ_equals[
+  l:univ, 
+  r: univ 
+]: boolean { 
+  (equ[l,r]) => true else false 
+} 
+
+fun fun_set_add[
+  l: set univ,
+  e: univ
+]: set univ { 
+  l+e 
+} 
+
+fun fun_set_remove[
+  l: set univ,
+  e: univ
+]: set univ {
+  l-e
+}
+fun fun_set_contains[
+  l: set univ,
+  e: univ
+]: boolean {
+  (e in l) => true else false 
+} 
+pred isSubset[
+  l: set univ,
+  r: set univ
+] {
+  (l in r) 
+} 
+pred isNotSubset[
+  l: set univ,
+  r: set univ
+] {
+  (l !in r) 
+} 
+fun fun_set_size[s: set univ]: Int { #s } 
+
+fun fun_not_empty_set[s: set univ]: boolean { (#s = 0) => false else true } 
+
+pred pred_empty_set[l: set univ] { (no l) } 
+
+pred pred_set_some[l: set univ] { some l } 
+
+pred pred_set_one[l: set univ] { one l } 
+
+pred pred_set_lone[l: set univ] { lone l } 
+
+
+fun fun_set_intersection[
+  l: set univ,
+  r: set univ
+]: set univ {
+  l & r 
+} 
+fun fun_set_difference[
+  l: set univ,
+  r: set univ
+]: set univ {
+  l - r 
+} 
+fun fun_set_sum[
+  s: set Int
+]: Int {
+  sum s 
+} 
+pred pred_empty_list[l: seq univ] { (no l) } 
+
+fun fun_list_add[
+  l: seq univ,
+  e: univ
+]: seq univ {
+  sequniv/add[l,e] 
+} 
+
+fun fun_list_get[
+  l: seq univ, 
+  index: Int
+]: univ { 
+  index.l 
+} 
+
+fun fun_list_contains[
+  l: seq univ, 
+  e: univ
+]: boolean { 
+  (e in Int.l) => true else false 
+} 
+
+fun fun_list_remove[
+  l: seq univ, 
+  index: Int
+]: seq univ { 
+  sequniv/delete[l,index] 
+} 
+
+fun fun_list_size[s: seq univ]: Int { #s } 
+
+fun fun_list_equals[
+  s1:seq univ, 
+  s2: seq univ
+]: boolean { 
+  (s1=s2) => true else false 
+} 
+
+fun fun_list_empty[s: seq univ]: boolean { (#s = 0) => true else false } 
+
+pred pred_empty_map[map: univ -> univ] { (no map) } 
+
+fun fun_map_put[
+  map: univ->univ, 
+  k: univ, 
+  v: univ
+]: univ-> univ { 
+  map ++ (k->v) 
+}
+
+fun fun_map_contains_key[
+  map: univ -> univ, 
+  k: univ
+]: boolean { 
+  (some k.map) => true else false 
+}
+
+fun fun_map_remove[
+  map: univ -> univ, 
+  k: univ
+]: univ->univ {
+  map - (k->univ) 
+} 
+
+fun fun_map_get[
+  map: univ -> univ, 
+  k: univ
+]: univ { 
+  (some k.map) => k.map else null 
+} 
+
+fun fun_map_is_empty[
+  map: univ -> univ, 
+]: boolean { 
+  (some map) => false else true 
+}
+
+fun fun_map_clear[
+  mapEntries1: univ -> univ -> univ, 
+  map: univ
+]: univ -> univ -> univ { 
+  mapEntries1 - (map -> univ -> univ)
+}
+
+fun fun_map_size[
+  map: univ -> univ, 
+]: univ {
+  #map 
+} 
+
+pred isEmptyOrNull[u: univ] { u in null } 
+fun fun_closure[
+  rel: univ -> univ 
+]: univ -> univ {
+  ^rel 
+} 
+
+fun fun_reflexive_closure[
+  rel: univ -> univ 
+]: univ -> univ {
+  *rel 
+} 
+
+fun fun_transpose[
+  rel: univ -> univ 
+]: univ -> univ {
+  ~rel 
+} 
+
+
+fun rel_override[
+  r:univ->univ,
+  k:univ, 
+  v:univ
+]: univ->univ { 
+  r - (k->univ) + (k->v) 
+} 
+
+
+pred pred_in[n: univ, t: set univ] { n in t } 
+
+pred instanceOf[n: univ, t: set univ] { n in t } 
+
+pred isCasteableTo[n: univ, t: set univ] { (n in t) or (n = null) } 
+
+
+
+abstract sig actionExec{}
+
+
+
+
+pred pos_gen_Int[y:Int]{
+ some i: Int | y = i
+}
+
+
+act gen_intA[x:Int] {
+  pre {TruePred[]}
+  post {pos_gen_Int[x'] }
+}
+
+
+
+pred pos_gen_bool[y:boolean]{
+ some i: boolean | y = i
+}
+
+
+act gen_bool[x:boolean] {
+  pre {TruePred[]}
+  post {pos_gen_bool[x'] }
+}
+
+
+pred pos_gen_I32[y:JavaPrimitiveIntegerValue]{
+  some i: JavaPrimitiveIntegerValue | pred_java_primitive_integer_value_eq[y,i]
+}
+
+
+
+act gen_intJ[x:JavaPrimitiveIntegerValue] {
+  pre {TruePred[]}
+  post { pos_gen_I32[x'] }
+}
+
+
+
+
+
+
+
+pred pos_add_null[s:JavaPrimitiveIntegerValue,b:boolean]{
+   equ[s,null] implies equ[b,false]
+   not equ[s,null] implies equ[b,true]
+}
+
+
+pred pos_verify_null[s:JavaPrimitiveIntegerValue+null,b:boolean]{
+   equ[s,null] implies equ[b,false]
+   not equ[s,null] implies equ[b,true]
+}
+
+act verify_null[s:JavaPrimitiveIntegerValue,b:boolean] {
+  pre {TruePred[]}
+  post {pos_add_null[s,b'] }
+}
+
+pred pos_vaciar[s:set univ]{
+    no s
+}
+
+
+act init_set[s:set univ] {
+  pre {TruePred[]}
+  post {pos_vaciar[s']}
+}
+
+
+pred sequence[s: JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue] {all x: s.JavaPrimitiveIntegerValue | int32_prevs[x] in s.JavaPrimitiveIntegerValue}
+
+
+
+
+
+// accion que asigna el parametro de retorno generado por alguna otra accion previa al parametro entero 2
+
+
+pred pre_assign_intJ2[a: boolean]{
+a=true
+}
+
+pred pos_assign_intJ2[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  a: JavaPrimitiveIntegerValue,a': JavaPrimitiveIntegerValue,
+  ret: JavaPrimitiveIntegerValue,ret':JavaPrimitiveIntegerValue,
+  valid: boolean,valid':boolean,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{
+  values=values' and size=size' and vac=vac' and valid=valid' and ret=ret' and a'= ret' 
+}
+
+
+
+act assign_int2_action[
+  /*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/return_Jint_1:JavaPrimitiveIntegerValue,/*inout*/valid_intJ:boolean,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+   pre { pre_assign_intJ[valid_intJ] }
+   post { pos_assign_intJ[vac,vac',size,size',intJ_2,intJ_2',return_Jint_1,return_Jint_1',valid_intJ,valid_intJ',thisType_1,thisType_1'] }
+}/*scope:1*/
+
+
+pred precondition_stack_pop
+[vac:boolean,values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{    
+  sequence[values] and vac=false
+}
+
+
+
+
+
+pred postcondition_stack_pop 
+[ vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue
+]
+{
+
+myseq_card[values,size] and pred_java_primitive_integer_value_add[size',i321,size,false] and 
+
+(some a:JavaPrimitiveIntegerValue |  a=int32_max[values.JavaPrimitiveIntegerValue] and values'=values-(a->ret) and (a->ret) in values and 
+                                     pred_java_primitive_integer_value_eq[ret,a.values]) 
+
+
+and (pred_java_primitive_integer_value_eq[size',i320] implies vac'=true)
+and (pred_java_primitive_integer_value_neq[size',i320] implies vac'=false)
+}
+
+
+act stack_pop_action
+[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/return_Jint_1: JavaPrimitiveIntegerValue]{  
+    pre { precondition_stack_pop[vac,thisType_1] }
+    post { postcondition_stack_pop[vac,vac',size,size',thisType_1,thisType_1',return_Jint_1'] }
+}/*scope:1*/
+
+
+
+
+
+pred pre_add_element[]{}
+
+pred pos_add_element[
+  e: JavaPrimitiveIntegerValue,e':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  vac:boolean,vac':boolean]
+{
+  sequence[values] and 
+  myseq_card[values,size] and  values'=values+(size->e) and
+  pred_java_primitive_integer_value_add[size,i321,size',false] and vac'=false
+}
+
+act vector_addElement_action[/*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/vac:boolean] {  
+   pre { pre_add_element[] }
+   post { pos_add_element[intJ_1,intJ_1',thisType_1,thisType_1',size,size',vac,vac'] }
+}/*scope:1*/
+
+
+pred postcondition_Lista_get 
+[
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  indice: JavaPrimitiveIntegerValue,
+  retorno: JavaPrimitiveIntegerValue,
+  size:JavaPrimitiveIntegerValue,
+  size':JavaPrimitiveIntegerValue
+]
+{
+      sequence[values] and values'=values and  pred_java_primitive_integer_value_eq[retorno,values[indice]] and 
+pred_java_primitive_integer_value_eq[size,size']
+    
+
+}
+
+
+pred precondition_Lista_get
+[
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  indice: JavaPrimitiveIntegerValue
+]
+{
+   not (no indice.values) and sequence[values] 
+
+}
+
+
+act Lista_get[/*out*/return_Jint_1: JavaPrimitiveIntegerValue,/*in*/intJ_1:JavaPrimitiveIntegerValue, /*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/size:JavaPrimitiveIntegerValue] {  
+    pre { precondition_Lista_get[thisType_1,intJ_1] }
+    post { postcondition_Lista_get[thisType_1,thisType_1',intJ_1,return_Jint_1',size,size'] }
+}/*scope:0*/
+
+
+pred pre_assign_bool[a: boolean]{
+a=true
+}
+
+pred pos_assign_bool[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  a: boolean,a': boolean,
+  ret: boolean,ret':boolean,
+  valid: boolean,valid':boolean,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{
+  values=values' and size=size' and vac=vac' and valid=valid' and ret=ret' and a'= ret' 
+}
+
+
+
+act assign_bool_action[
+  /*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout||*/bool_1:boolean,/*inout*/return_bool:boolean,/*inout*/valid_bool:boolean,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+   pre { pre_assign_bool[valid_bool] }
+   post { pos_assign_bool[vac,vac',size,size',bool_1,bool_1',return_bool,return_bool',valid_bool,valid_bool',thisType_1,thisType_1'] }
+}/*scope:1*/
+
+
+pred postcondition_setsize
+[i:JavaPrimitiveIntegerValue,i':JavaPrimitiveIntegerValue,vac:boolean,vac':boolean,size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue, values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values': JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{
+
+ pred_java_primitive_integer_value_eq[i,i'] and 
+  myseq_card[values,size] and 
+ pred_java_primitive_integer_value_eq[i,size'] and 
+ (pred_java_primitive_integer_value_eq[i,i320] implies vac'=true) and 
+ (pred_java_primitive_integer_value_gt[i,i320] implies vac'=false) and
+
+
+(pred_java_primitive_integer_value_eq[i,size] implies values=values') and 
+
+
+ ((pred_java_primitive_integer_value_lt[i,size]  and  pred_java_primitive_integer_value_gt_zero[i]) 
+implies 
+(
+   values' in values  and 
+
+all j: values.JavaPrimitiveIntegerValue |
+   
+      
+    (pred_java_primitive_integer_value_lt[j,i] implies  (j in values'.JavaPrimitiveIntegerValue)) and 
+    (pred_java_primitive_integer_value_gte[j,i] implies  not (j in values'.JavaPrimitiveIntegerValue)) 
+)
+)
+
+and
+
+(pred_java_primitive_integer_value_gt[i,size] implies 
+(
+(all p:JavaPrimitiveIntegerValue |(pred_java_primitive_integer_value_gte[p,size] and  pred_java_primitive_integer_value_lt[p,i])
+implies p->Null in values') 
+ and values in values' and 
+(let dom = values.JavaPrimitiveIntegerValue | values' - (dom->Null) = values'  )
+
+
+
+)
+)
+}
+
+
+
+
+
+pred precondition_setsize
+[v:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),i:JavaPrimitiveIntegerValue]{
+sequence[v] and pred_java_primitive_integer_value_gte[i,i320]
+}
+
+act vector_setsize_action
+[/*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  pre {
+   precondition_setsize[thisType_1,intJ_1]
+}
+   post {
+   postcondition_setsize[intJ_1,intJ_1',vac,vac',size,size',thisType_1,thisType_1']
+
+}}/*scope:0*/
+pred precondition_stack_push[values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{
+sequence[values] 
+}
+
+pred postcondition_stack_push[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  e: JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret:JavaPrimitiveIntegerValue
+]
+{
+ sequence[values] and pred_java_primitive_integer_value_eq[size,size'] and
+ myseq_card[values,size] and  values'=values+(size->e) and
+ pred_java_primitive_integer_value_add[size,i321,size',false] and vac'=false and 
+ pred_java_primitive_integer_value_eq[ret,e]
+}
+
+
+
+act stack_push_action[
+  /*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/intJ_2:JavaPrimitiveIntegerValue,
+  /*inout*/vac:boolean, 
+  /*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_Jint_1:JavaPrimitiveIntegerValue] {  
+   pre { precondition_stack_push[thisType_1] }
+   post { postcondition_stack_push[vac,vac',size,size',intJ_1,thisType_1,thisType_1',return_Jint_1'] }
+}/*scope:1*/
+
+
+pred postcondition_clear
+[vac:boolean,vac':boolean,size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue, values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values': JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{ pred_java_primitive_integer_value_eq[size',i320] and sequence[values'] and vac'=true
+}
+
+pred precondition_clear
+[v: JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{
+sequence[v]
+}
+
+act vector_clear_action
+[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  pre {
+   precondition_clear[thisType_1]
+}
+   post {
+   postcondition_clear[vac,vac',size,size',thisType_1,thisType_1']
+
+}}/*scope:0*/
+pred postcondition_Lista_eat 
+[
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  indice: JavaPrimitiveIntegerValue,
+  retorno: JavaPrimitiveIntegerValue,
+  size:JavaPrimitiveIntegerValue,
+  size':JavaPrimitiveIntegerValue
+]
+{
+      sequence[values] and values'=values and  pred_java_primitive_integer_value_eq[retorno,values[indice]] and 
+pred_java_primitive_integer_value_eq[size,size']
+    
+
+}
+
+
+pred precondition_Lista_eat
+[
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  indice: JavaPrimitiveIntegerValue
+]
+{
+   not (no indice.values) and sequence[values] 
+
+}
+
+
+act vector_elementAt_action[/*out*/return_Jint_1: JavaPrimitiveIntegerValue,/*in*/intJ_1:JavaPrimitiveIntegerValue, /*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/size:JavaPrimitiveIntegerValue] {  
+    pre { precondition_Lista_eat[thisType_1,intJ_1] }
+    post { postcondition_Lista_eat[thisType_1,thisType_1',intJ_1,return_Jint_1',size,size'] }
+}/*scope:0*/
+
+
+pred postcondition_le[size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue]
+{
+  sequence[values] and values'=values and pred_java_primitive_integer_value_eq[size,size'] and
+  myseq_card[values,size] and ret=values[fun_java_primitive_integer_value_sub[size,i321]]
+}
+
+
+pred precondition_le[thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{      
+    sequence[thisType_1] and not (no thisType_1)
+}
+
+
+act vector_lastElement_action[/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_Jint_1: JavaPrimitiveIntegerValue] {  
+    pre { precondition_le[thisType_1] }
+    post { postcondition_le[size,size',thisType_1,thisType_1,return_Jint_1'] }
+}/*scope:0*/
+
+
+pred pre_size[]{}
+
+pred pos_size [vac:boolean,vac':boolean,
+   size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+   return_int':JavaPrimitiveIntegerValue, 
+   values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{ 
+
+  sequence[values] and values'=values and vac=vac' and 
+  myseq_card[values,return_int'] and 
+  pred_java_primitive_integer_value_eq[size,return_int'] and 
+  pred_java_primitive_integer_value_eq[size,size'] 
+}
+
+
+act vector_size_action
+[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*out*/return_Jint_1:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  pre {
+   pre_size[]
+}
+   post {
+   pos_size[vac,vac',size,size',return_Jint_1',thisType_1,thisType_1']
+}}/*scope:0*/
+
+
+
+
+
+
+
+
+
+
+pred postcondition_Lista_contains[elem:JavaPrimitiveIntegerValue,elem':JavaPrimitiveIntegerValue,vac:boolean,vac':boolean,size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),return_bool: boolean]
+{ 
+
+ vac=vac' values'=values and 
+
+(( not (no values.elem ) implies equ[return_bool, true])
+     and
+  ((no values.elem ) implies equ[return_bool, false] ))
+and 
+ myseq_card[values,size] and pred_java_primitive_integer_value_eq[size,size'] and pred_java_primitive_integer_value_eq[elem,elem'] 
+
+
+}
+
+
+pred precondition_Lista_contains[values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{
+    sequence[values] 
+}
+
+act stack_contains_action
+[ /*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/vac:boolean,/*out*/return_bool:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1: JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  pre { precondition_Lista_contains[thisType_1]}
+   post {postcondition_Lista_contains[intJ_1,intJ_1',vac,vac',size,size',thisType_1,thisType_1',return_bool']
+}}/*scope:0*/
+
+pred pre_add[values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{}
+
+pred pos_add[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  e: JavaPrimitiveIntegerValue,  e': JavaPrimitiveIntegerValue, 
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  return_bool:boolean
+]
+{
+ sequence[values] and myseq_card[values,size] and  values'=values+(size->e) and
+  pred_java_primitive_integer_value_add[size,i321,size',false] and vac'=false and 
+  pred_java_primitive_integer_value_eq[e,e'] and return_bool=true
+}
+
+
+
+act vector_add_action[/*in*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_bool:boolean] {  
+   pre { pre_add[thisType_1] }
+   post { pos_add[vac,vac',size,size',intJ_1,intJ_1',thisType_1,thisType_1',return_bool'] }
+}/*scope:1*/
+
+
+pred pre_iea[size:JavaPrimitiveIntegerValue,indice: JavaPrimitiveIntegerValue,values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{   (not (no indice.values) or pred_java_primitive_integer_value_eq[indice,size] ) and  sequence[values] 
+ }
+
+
+
+pred pos_iea
+[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  elem: JavaPrimitiveIntegerValue,  elem': JavaPrimitiveIntegerValue,
+  indice:JavaPrimitiveIntegerValue,indice':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{
+        vac'=false and myseq_card[values,size]
+        pred_java_primitive_integer_value_add[size,i321,size',true] and
+	pred_java_primitive_integer_value_eq[indice,indice'] and 
+	pred_java_primitive_integer_value_eq[elem,elem'] and 
+	sequence[values] and 
+        (indice->elem) in values' and
+        (all a,b:JavaPrimitiveIntegerValue | (a->b) in values implies (
+	(pred_java_primitive_integer_value_lt[a,indice] implies  (a->b) in values' ) and
+	(pred_java_primitive_integer_value_gt[a,indice] implies  (fun_java_primitive_integer_value_add[a,i321]->b) in values' )
+        )) and JavaPrimitiveIntegerValue.values'= JavaPrimitiveIntegerValue.values + elem
+}
+
+
+
+
+act vector_insertElement_action[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*in*/intJ_1:JavaPrimitiveIntegerValue,/*in*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+   pre { pre_iea[size,intJ_1,thisType_1] }
+   post { pos_iea[vac,vac',size,size',intJ_1,intJ_1',intJ_2,intJ_2',thisType_1,thisType_1'] }
+}/*scope:1*/
+
+
+
+
+
+
+
+pred pre_add2[size:JavaPrimitiveIntegerValue,indice: JavaPrimitiveIntegerValue,values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{   (not (no indice.values) or pred_java_primitive_integer_value_eq[indice,size] ) and  sequence[values] 
+ }
+
+
+
+pred pos_add2
+[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  elem: JavaPrimitiveIntegerValue,  elem': JavaPrimitiveIntegerValue,
+  indice:JavaPrimitiveIntegerValue,indice':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{
+        vac'=false and myseq_card[values,size]
+        pred_java_primitive_integer_value_add[size,i321,size',true] and
+	pred_java_primitive_integer_value_eq[indice,indice'] and 
+	pred_java_primitive_integer_value_eq[elem,elem'] and 
+	sequence[values] and 
+        (indice->elem) in values' and
+        (all a,b:JavaPrimitiveIntegerValue | (a->b) in values implies (
+	(pred_java_primitive_integer_value_lt[a,indice] implies  (a->b) in values' ) and
+	(pred_java_primitive_integer_value_gt[a,indice] implies  (fun_java_primitive_integer_value_add[a,i321]->b) in values' )
+        )) and JavaPrimitiveIntegerValue.values'= JavaPrimitiveIntegerValue.values + elem
+}
+
+
+
+
+act stack_addIndexItem_action[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*in*/intJ_1:JavaPrimitiveIntegerValue,/*in*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+   pre { pre_add2[size,intJ_1,thisType_1] }
+   post { pos_add2[vac,vac',size,size',intJ_1,intJ_1',intJ_2,intJ_2',thisType_1,thisType_1'] }
+}/*scope:1*/
+
+
+pred postcondition_removeallelements
+[vac:boolean,vac':boolean,size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue, values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values': JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{ 
+ pred_java_primitive_integer_value_eq[size',i320] and vac'=true and sequence[values]
+
+
+}
+
+pred precondition_removeallelements
+[v: JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{
+sequence[v]
+}
+
+act vector_removeallelements_action
+[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  pre {
+   precondition_removeallelements[thisType_1]
+}
+   post {
+   postcondition_removeallelements[vac,vac',size,size',thisType_1,thisType_1']
+
+}}/*scope:0*/
+pred precondition_Lista_set_element
+[ indice:JavaPrimitiveIntegerValue,values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  not (no indice.values) and sequence[values]}
+
+
+pred postcondition_Lista_set_element
+[ size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  indice: JavaPrimitiveIntegerValue,
+  elem: JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  retorno:JavaPrimitiveIntegerValue
+]
+{
+  pred_java_primitive_integer_value_eq[size,size'] and myseq_card[values,size] and
+  sequence[values]  and retorno=indice.values and values'=values++(indice->elem) and sequence[values']
+}
+
+
+
+act stack_setElement_action[/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/size':JavaPrimitiveIntegerValue,/*in*/intJ_1:JavaPrimitiveIntegerValue,/*in*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_Jint_1:JavaPrimitiveIntegerValue] {  
+   pre { precondition_Lista_set_element[intJ_1,thisType_1] }
+   post { postcondition_Lista_set_element[size,size',intJ_1,intJ_2,thisType_1,thisType_1',return_Jint_1'] }
+}/*scope:0*/
+
+
+pred postcondition_sle3[size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue]
+{
+  sequence[values] and values'=values and pred_java_primitive_integer_value_eq[size,size'] and
+  myseq_card[values,size] and ret=values[fun_java_primitive_integer_value_sub[size,i321]]
+}
+
+
+pred precondition_sle3[thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{      
+    sequence[thisType_1] and not (no thisType_1)
+}
+
+
+act vector_peek_action[/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_Jint_1: JavaPrimitiveIntegerValue] {  
+    pre { precondition_sle3[thisType_1] }
+    post { postcondition_sle3[size,size',thisType_1,thisType_1,return_Jint_1'] }
+}/*scope:0*/
+
+
+pred postcondition_Lista_isEmpty 
+[ /*elem:JavaPrimitiveIntegerValue,elem': JavaPrimitiveIntegerValue,
+  elem2:JavaPrimitiveIntegerValue,elem2':JavaPrimitiveIntegerValue,*/
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  return_bool: boolean 
+]
+{       // pred_java_primitive_integer_value_eq[elem,elem'] and pred_java_primitive_integer_value_eq[elem2,elem2'] and 
+     (equ[return_bool, true] iff no values) and values=values' and 
+     myseq_card[values,size] and pred_java_primitive_integer_value_eq[size,size']
+}
+
+
+pred precondition_Lista_isEmpty
+[ values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{
+sequence[values]
+}
+
+act stack_empty_action[/*out*/return_bool:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+    pre { precondition_Lista_isEmpty[thisType_1] }
+    post { postcondition_Lista_isEmpty[size,size',thisType_1,thisType_1',return_bool'] 
+}}/*scope:0*/
+
+
+pred postcondition_Lista_remove_fo2
+[ size:JavaPrimitiveIntegerValue, size':JavaPrimitiveIntegerValue, 
+  elem: JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: boolean,
+  vac:boolean,
+  vac':boolean]
+{  (pred_java_primitive_integer_value_eq[size',i320] implies vac'=true) and 
+   (pred_java_primitive_integer_value_neq[size',i320] implies vac'=false) and 
+
+   myseq_card[values,size] and sequence[values] and sequence[values'] and
+   (((no values.elem)  and ret=false and values=values' and pred_java_primitive_integer_value_eq[size',size]) 
+    or
+
+   
+   (ret=true and pred_java_primitive_integer_value_add[size',i321,size,false]  and 
+   (some i :JavaPrimitiveIntegerValue |
+	    (i->elem) in values and 
+            (all a,b:JavaPrimitiveIntegerValue | (a->b) in values  implies (
+        	( pred_java_primitive_integer_value_lt[a,i]  implies (a->b) in values'  and   pred_java_primitive_integer_value_neq[b,elem])    and
+		( pred_java_primitive_integer_value_lt[i,a]  implies ((fun_java_primitive_integer_value_sub[a,i321])->b) in values')) 
+                                    ))))
+}
+
+
+pred precondition_Lista_remove_fo2
+[]{ }
+
+act vector_remove_action[/*inout*/size:JavaPrimitiveIntegerValue,/*in*/intJ_1: JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_bool: boolean,/*inout*/vac: boolean] {  
+    pre { precondition_Lista_remove_fo2[] }
+    post { postcondition_Lista_remove_fo2[size,size',intJ_1,thisType_1,thisType_1',return_bool',vac,vac'] }
+}/*scope:1*/
+
+pred precondition_Lista_set_elementA
+[ indice:JavaPrimitiveIntegerValue,values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  not (no indice.values) and sequence[values]}
+
+
+pred postcondition_Lista_set_elementA
+[ size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  indice: JavaPrimitiveIntegerValue,
+  elem: JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  retorno:JavaPrimitiveIntegerValue
+]
+{
+  pred_java_primitive_integer_value_eq[size,size'] and myseq_card[values,size] and
+  sequence[values]  and retorno=indice.values and values'=values++(indice->elem) and sequence[values']
+}
+
+
+
+act stack_set_action[/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/size':JavaPrimitiveIntegerValue,/*in*/intJ_1:JavaPrimitiveIntegerValue,/*in*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_Jint_1:JavaPrimitiveIntegerValue] {  
+   pre { precondition_Lista_set_elementA[intJ_1,thisType_1] }
+   post { postcondition_Lista_set_elementA[size,size',intJ_1,intJ_2,thisType_1,thisType_1',return_Jint_1'] }
+}/*scope:0*/
+
+
+//Elimina un elemento del vector, se pasa el indice como parametro  y retorna el elemento removido
+pred precondition_Lista_remove_m
+[
+  indice:JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]{  not (no indice.values)
+}
+
+pred postcondition_Lista_remove_m
+[ size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  indice:JavaPrimitiveIntegerValue, 
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue,
+  vac:boolean,
+  vac':boolean
+
+
+]
+{
+
+
+
+
+(pred_java_primitive_integer_value_eq[size',i320] implies vac'=true) and 
+   (pred_java_primitive_integer_value_neq[size',i320] implies vac'=false) and 
+
+
+  sequence[values] and sequence[values']  and 
+
+  pred_java_primitive_integer_value_eq[ret,indice.values]  
+
+and 
+
+ (all a,b:JavaPrimitiveIntegerValue | (a->b) in values implies 
+	(( pred_java_primitive_integer_value_lt[a,indice] implies (a->b) in  values') and
+	 ( pred_java_primitive_integer_value_gt[a,indice] implies (fun_java_primitive_integer_value_sub[a,i321]->b) in values'))
+) and 
+  JavaPrimitiveIntegerValue.values' + indice.values = JavaPrimitiveIntegerValue.values  
+
+and  myseq_card[values,size] and  let ss=fun_java_primitive_integer_value_sub[size,i321] |
+   not (((ss)->JavaPrimitiveIntegerValue) in values')  and myseq_card[values',ss] 
+
+}
+
+
+act vector_removeIndex_action[
+   /*inout*/size:JavaPrimitiveIntegerValue,
+   /*in*/intJ_1:JavaPrimitiveIntegerValue,
+   /*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+   /*out*/return_Jint_1:JavaPrimitiveIntegerValue,
+   /*inout*/ vac:boolean]
+{  
+   pre { precondition_Lista_remove_m[intJ_1,thisType_1] }
+   post { postcondition_Lista_remove_m[size,size',intJ_1,thisType_1,thisType_1',return_Jint_1',vac,vac'] }
+}/*scope:1*/
+
+
+
+pred postcondition_Lista_get_first 
+[
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue
+]
+{
+   sequence[values] and values'=values and
+   pred_java_primitive_integer_value_eq[ret,values[i320]] and 
+   pred_java_primitive_integer_value_eq[size,size']
+} 
+
+
+pred precondition_Lista_get_first
+[
+  thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{  sequence[thisType_1] and not (no thisType_1)}
+
+act get_first[/*out*/return_intJ_1: JavaPrimitiveIntegerValue, /*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/size:JavaPrimitiveIntegerValue] {  
+    pre { precondition_Lista_get_first[thisType_1] }
+    post { postcondition_Lista_get_first[thisType_1,thisType_1',return_intJ_1',size,size'] }
+}/*scope:0*/ 
+pred postcondition_stack_search 
+[
+  size:JavaPrimitiveIntegerValue,
+  size':JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  v: JavaPrimitiveIntegerValue,
+  ret: JavaPrimitiveIntegerValue
+]
+{
+
+    sequence[values]  and values'=values and pred_java_primitive_integer_value_eq[size,size'] and
+    myseq_card[values,size]
+   
+   (( some i:JavaPrimitiveIntegerValue | i->v  in values and pred_java_primitive_integer_value_eq[ret,i]) or
+   ( no values.v   and  pred_java_primitive_integer_value_eq[ret,i32m1]))
+      
+ 
+} 
+
+
+pred precondition_stack_search
+[
+  thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{      
+    sequence[thisType_1] 
+}
+
+act stack_search_action[/*out*/return_Jint_1: JavaPrimitiveIntegerValue,/*inout*/size:JavaPrimitiveIntegerValue,/*in*/intJ_1: JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+    pre { precondition_stack_search[thisType_1] }  
+    post { postcondition_stack_search[size,size',thisType_1,thisType_1',intJ_1,return_Jint_1'] }
+}/*scope:0*/ 
+pred postcondition_Lista_get_firstA 
+[
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: JavaPrimitiveIntegerValue,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue
+]
+{
+   sequence[values] and values'=values and
+   pred_java_primitive_integer_value_eq[ret,values[i320]] and 
+   pred_java_primitive_integer_value_eq[size,size']
+} 
+
+
+pred precondition_Lista_get_firstA
+[
+  thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{  sequence[thisType_1] and not (no thisType_1)}
+
+act stack_firstElement_action[/*out*/return_intJ_1: JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/size:JavaPrimitiveIntegerValue] {  
+    pre { precondition_Lista_get_firstA[thisType_1] }
+    post { postcondition_Lista_get_firstA[thisType_1,thisType_1',return_intJ_1',size,size'] }
+}/*scope:0*/ 
+pred pre_assign_intJ[a: boolean]{
+a=true
+}
+
+pred pos_assign_intJ[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  a: JavaPrimitiveIntegerValue,a': JavaPrimitiveIntegerValue,
+  ret: JavaPrimitiveIntegerValue,ret':JavaPrimitiveIntegerValue,
+  valid: boolean,valid':boolean,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{
+  values=values' and size=size' and vac=vac' and valid=valid' and ret=ret' and a'= ret' 
+}
+
+
+
+act assign_int_action[
+  /*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/intJ_1:JavaPrimitiveIntegerValue,/*inout*/return_Jint_1:JavaPrimitiveIntegerValue,/*inout*/valid_intJ:boolean,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+   pre { pre_assign_intJ[valid_intJ] }
+   post { pos_assign_intJ[vac,vac',size,size',intJ_1,intJ_1',return_Jint_1,return_Jint_1',valid_intJ,valid_intJ',thisType_1,thisType_1'] }
+}/*scope:1*/
+
+
+//Elimina un elemento del vector, se pasa el indice como parametro  y retorna void 
+pred precondition_Lista_remove_mat
+[
+  indice:JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]{  not (no indice.values)
+}
+
+pred postcondition_Lista_remove_mat
+[ size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  indice:JavaPrimitiveIntegerValue, 
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),vac:boolean,vac':boolean]
+{
+
+(pred_java_primitive_integer_value_eq[size',i320] implies vac'=true) and 
+   (pred_java_primitive_integer_value_neq[size',i320] implies vac'=false) and 
+
+  sequence[values] and sequence[values']    
+
+and 
+
+ (all a,b:JavaPrimitiveIntegerValue | (a->b) in values implies 
+	(( pred_java_primitive_integer_value_lt[a,indice] implies (a->b) in  values') and
+	 ( pred_java_primitive_integer_value_gt[a,indice] implies (fun_java_primitive_integer_value_sub[a,i321]->b) in values'))
+) and 
+  JavaPrimitiveIntegerValue.values' + indice.values = JavaPrimitiveIntegerValue.values  
+
+and  myseq_card[values,size] and  let ss=fun_java_primitive_integer_value_sub[size,i321] |
+   not (((ss)->JavaPrimitiveIntegerValue) in values')  and myseq_card[values',ss] 
+
+}
+
+
+act vector_removeElementAt_action[
+   /*inout*/size:JavaPrimitiveIntegerValue,
+   /*in*/intJ_1:JavaPrimitiveIntegerValue,
+   /*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*inout*/vac:boolean]
+{  
+   pre { precondition_Lista_remove_mat[intJ_1,thisType_1] }
+   post { postcondition_Lista_remove_mat[size,size',intJ_1,thisType_1,thisType_1',vac,vac'] }
+}/*scope:1*/
+
+
+//Elimina un elemento del vector y retorna un boolean 
+
+pred postcondition_Lista_remove_fo
+[ size:JavaPrimitiveIntegerValue, size':JavaPrimitiveIntegerValue, 
+  elem: JavaPrimitiveIntegerValue,
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  ret: boolean,vac:boolean,vac':boolean
+]
+{ 
+
+   (pred_java_primitive_integer_value_eq[size',i320] implies vac'=true) and 
+   (pred_java_primitive_integer_value_neq[size',i320] implies vac'=false) and
+   myseq_card[values,size] and sequence[values] and sequence[values'] and
+   (((no values.elem)  and ret=false and values=values' and pred_java_primitive_integer_value_eq[size',size]) 
+    or
+
+   
+   (ret=true and pred_java_primitive_integer_value_add[size',i321,size,false]  and 
+   (some i :JavaPrimitiveIntegerValue |
+	    (i->elem) in values and 
+            (all a,b:JavaPrimitiveIntegerValue | (a->b) in values  implies (
+        	( pred_java_primitive_integer_value_lt[a,i]  implies (a->b) in values'  and   pred_java_primitive_integer_value_neq[b,elem])    and
+		( pred_java_primitive_integer_value_lt[i,a]  implies ((fun_java_primitive_integer_value_sub[a,i321])->b) in values')) 
+                                    ))))
+}
+
+
+pred precondition_Lista_remove_fo
+[]{ }
+
+act vector_removeElement_action[/*inout*/size:JavaPrimitiveIntegerValue,/*in*/intJ_1: JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),/*out*/return_bool: boolean,/*inout*/vac:boolean] {  
+    pre { precondition_Lista_remove_fo[] }
+    post { postcondition_Lista_remove_fo[size,size',intJ_1,thisType_1,thisType_1',return_bool',vac,vac'] }
+}/*scope:1*/
+
+
+
+
+one sig assign_int2_action extends actionExec{}
+one sig stack_pop_action extends actionExec{}
+one sig vector_addElement_action extends actionExec{}
+one sig Lista_get extends actionExec{}
+one sig assign_bool_action extends actionExec{}
+one sig vector_setsize_action extends actionExec{}
+one sig stack_push_action extends actionExec{}
+one sig vector_clear_action extends actionExec{}
+one sig vector_elementAt_action extends actionExec{}
+one sig vector_lastElement_action extends actionExec{}
+one sig vector_size_action extends actionExec{}
+one sig stack_contains_action extends actionExec{}
+one sig vector_add_action extends actionExec{}
+one sig vector_insertElement_action extends actionExec{}
+one sig stack_addIndexItem_action extends actionExec{}
+one sig vector_removeallelements_action extends actionExec{}
+one sig stack_setElement_action extends actionExec{}
+one sig vector_peek_action extends actionExec{}
+one sig stack_empty_action extends actionExec{}
+one sig vector_remove_action extends actionExec{}
+one sig stack_set_action extends actionExec{}
+one sig vector_removeIndex_action extends actionExec{}
+one sig get_first extends actionExec{}
+one sig stack_search_action extends actionExec{}
+one sig stack_firstElement_action extends actionExec{}
+one sig assign_int_action extends actionExec{}
+one sig vector_removeElementAt_action extends actionExec{}
+one sig vector_removeElement_action extends actionExec{}
+assertCorrectness programa_wap[intJ_2:JavaPrimitiveIntegerValue,valid_bool:boolean,vac:boolean,return_Jint_1:JavaPrimitiveIntegerValue,bool_1:boolean,size:JavaPrimitiveIntegerValue,intJ_1:JavaPrimitiveIntegerValue,return_bool:boolean,return_intJ_1:JavaPrimitiveIntegerValue,ac:actionExec,valid_intJ:boolean,valid_intA:boolean,thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),size':JavaPrimitiveIntegerValue]{pre={precondition_Lista_contains[thisType_1]}
+program={valid_bool:=false;valid_intJ:=false;((gen_intJ[intJ_1] ; vector_remove_action[size,intJ_1,thisType_1,return_bool,vac]; ac:=vector_remove_action ; valid_bool:=true)+(gen_intJ[intJ_1] ; vector_removeElement_action[size,intJ_1,thisType_1,return_bool,vac]; ac:=vector_removeElement_action ; valid_bool:=true)+(gen_intJ[intJ_1] ; vector_removeIndex_action[size,intJ_1,thisType_1,return_Jint_1,vac]; ac:=vector_removeIndex_action ; verify_null[return_Jint_1,valid_intJ])+(stack_empty_action[return_bool,size,thisType_1]; ac:=stack_empty_action ; valid_bool:=true)+(gen_intJ[intJ_1] ; Lista_get[return_Jint_1,intJ_1,thisType_1,size]; ac:=Lista_get ; verify_null[return_Jint_1,valid_intJ])+(stack_firstElement_action[return_intJ_1,thisType_1,size]; ac:=stack_firstElement_action)+(vector_removeallelements_action[vac,size,thisType_1]; ac:=vector_removeallelements_action)+(assign_int_action[vac,size,intJ_1,return_Jint_1,valid_intJ,thisType_1]; ac:=assign_int_action)+(stack_pop_action[vac,size,thisType_1,return_Jint_1]; ac:=stack_pop_action)+(vector_lastElement_action[size,thisType_1,return_Jint_1]; ac:=vector_lastElement_action ; verify_null[return_Jint_1,valid_intJ])+(gen_intJ[intJ_1] ; vector_removeElementAt_action[size,intJ_1,thisType_1,vac]; ac:=vector_removeElementAt_action)+(vector_peek_action[size,thisType_1,return_Jint_1]; ac:=vector_peek_action ; verify_null[return_Jint_1,valid_intJ])+(vector_size_action[vac,size,return_Jint_1,thisType_1]; ac:=vector_size_action ; verify_null[return_Jint_1,valid_intJ])+(gen_intJ[intJ_1] ; stack_push_action[intJ_1,intJ_2,vac,size,thisType_1,return_Jint_1]; ac:=stack_push_action ; verify_null[return_Jint_1,valid_intJ])+(gen_intJ[intJ_1] ; gen_intJ[intJ_2] ; stack_set_action[size,size',intJ_1,intJ_2,thisType_1,return_Jint_1]; ac:=stack_set_action ; verify_null[return_Jint_1,valid_intJ])+(gen_intJ[intJ_1] ; gen_intJ[intJ_2] ; vector_insertElement_action[vac,size,intJ_1,intJ_2,thisType_1]; ac:=vector_insertElement_action)+(gen_intJ[intJ_1] ; vector_elementAt_action[return_Jint_1,intJ_1,thisType_1,size]; ac:=vector_elementAt_action ; verify_null[return_Jint_1,valid_intJ])+(vector_clear_action[vac,size,thisType_1]; ac:=vector_clear_action)+(gen_intJ[intJ_1] ; gen_intJ[intJ_2] ; stack_addIndexItem_action[vac,size,intJ_1,intJ_2,thisType_1]; ac:=stack_addIndexItem_action)+(gen_intJ[intJ_1] ; vector_add_action[intJ_1,intJ_2,vac,size,thisType_1,return_bool]; ac:=vector_add_action ; valid_bool:=true)+(gen_intJ[intJ_1] ; vector_setsize_action[intJ_1,vac,size,thisType_1]; ac:=vector_setsize_action)+(gen_intJ[intJ_1] ; vector_addElement_action[intJ_1,thisType_1,size,vac]; ac:=vector_addElement_action)+(gen_intJ[intJ_1] ; gen_intJ[intJ_2] ; stack_setElement_action[size,size',intJ_1,intJ_2,thisType_1,return_Jint_1]; ac:=stack_setElement_action ; verify_null[return_Jint_1,valid_intJ])+(get_first[return_intJ_1,thisType_1,size]; ac:=get_first)+(assign_bool_action[vac,size,bool_1,return_bool,valid_bool,thisType_1]; ac:=assign_bool_action)+(gen_intJ[intJ_1] ; stack_search_action[return_Jint_1,size,intJ_1,thisType_1]; ac:=stack_search_action ; verify_null[return_Jint_1,valid_intJ])+(assign_int2_action[vac,size,intJ_2,return_Jint_1,valid_intJ,thisType_1]; ac:=assign_int2_action))*}
+ post={pred_not[intJ_1,intJ_1',vac,vac',size,size',thisType_1,thisType_1',return_bool',valid_bool']}
+}
+pred pred_not[p_0:JavaPrimitiveIntegerValue,p_1:JavaPrimitiveIntegerValue,p_2:boolean,p_3:boolean,p_4:JavaPrimitiveIntegerValue,p_5:JavaPrimitiveIntegerValue,p_6:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),p_7:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),p_8:boolean,b:boolean]{ not(postcondition_Lista_contains[p_0,p_1,p_2,p_3,p_4,p_5,p_6,p_7,p_8] and b=true)}
+check programa_wap

@@ -1,0 +1,29 @@
+pred postcondition_Lista_contains[size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,elem: JavaPrimitiveIntegerValue,values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,values':JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue,return_bool: boolean]
+{ 
+
+  
+values'=values and
+
+(( not (no values.elem ) implies equ[return_bool, true])
+     and
+  ((no values.elem ) implies equ[return_bool, false] ))
+and 
+     myseq_card[values,size] and pred_java_primitive_integer_value_eq[size,size']
+
+}
+
+pred precondition_Lista_contains[values:JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]{
+sequence[values]
+
+}
+
+act stack_contains_action
+[ /*out*/return_bool:boolean,/*in*/size:JavaPrimitiveIntegerValue,intJ_1:JavaPrimitiveIntegerValue,/*inout*/thisType_1: JavaPrimitiveIntegerValue->lone JavaPrimitiveIntegerValue]
+{  pre {
+   precondition_Lista_contains[thisType_1]
+}
+   post {
+   postcondition_Lista_contains[size,size',intJ_1,thisType_1,thisType_1',return_bool']
+
+}}/*scope:0*/
+

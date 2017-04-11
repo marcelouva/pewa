@@ -1,0 +1,19 @@
+pred postcondition_clear
+[vac:boolean,vac':boolean,size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue, values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),values': JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{ pred_java_primitive_integer_value_eq[size',i320] and sequence[values'] and vac'=true
+}
+
+pred precondition_clear
+[v: JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]{
+sequence[v]
+}
+
+act vector_clear_action
+[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{  pre {
+   precondition_clear[thisType_1]
+}
+   post {
+   postcondition_clear[vac,vac',size,size',thisType_1,thisType_1']
+
+}}/*scope:0*/
