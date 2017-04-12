@@ -617,87 +617,99 @@ def procesar_logfile():
 
 	f=open("sali","r")
 	t = f.read()
-	f.close()
-	res=t.split("==")
-	name_action= res[1]
-        resto=res[2].split("\n")
-        states=0
-	cant_wacs=0
-	promedio_wac_1=0
-        pp=datetime.datetime.strptime('0:00:00.0', '%H:%M:%S.%f')
-	suma_sattime_w1=pp.strftime("%H:%M:%S.%f")
-
-        suma_sattime_w=pp.strftime("%H:%M:%S.%f")
-        cant_to=0
-        max_unroll=0
-	promedio_wacs_encontrados=0
-	flag_wac_1=False
-	cant_wac1=0
- 	for l in resto:
-	        if l.find("state=")>0:	
-			   states=states+1
-			   flag_wac_1=False
-	                   flag_wac=False 
-
-	        if l.find("wac_nro=1")>0 and not flag_wac_1:
-			   s=l.split('%')
-			   n=int(s[1].strip().split("=")[1])
-			   sattime=s[2].strip().split("=")[1].strip()
-                           cant_wac1=cant_wac1+1
-                           suma_sattime_w1=sumar_hora(sattime,suma_sattime_w1)  
-			   
-			   flag_wac_1=True
+	f.close()	
+	listado=t.split("Running")
+	#for i in range(0,len(listado)):
+	#    print listado[i]
+		
+        #    i=i+1	
+	#print listado
+	#sys.exit(0)        
 	
- 		if l.find("wac_nro=")>0:
-			   s=l.split('%')
-			   n=int(s[1].strip().split("=")[1])
-			   sattime=s[2].strip().split("=")[1].strip()
+	for elem in listado:
+          if elem.find("action")>0:
+		res=elem.split("==")
+		name_action= res[1]
+		resto=res[2].split("\n")
+		states=0
+		cant_wacs=0
+		promedio_wac_1=0
+		pp=datetime.datetime.strptime('0:00:00.0', '%H:%M:%S.%f')
+		suma_sattime_w1=pp.strftime("%H:%M:%S.%f")
 
-                           suma_sattime_w=sumar_hora(sattime,suma_sattime_w)  
+		suma_sattime_w=pp.strftime("%H:%M:%S.%f")
+		cant_to=0
+		max_unroll=0
+		promedio_wacs_encontrados=0
+		flag_wac_1=False
+		cant_wac1=0
 
-			   cant_wacs=cant_wacs+1
 
- 		if l.find("TO=True")>0:
-			   cant_to=cant_to+1
-			   s=l.split('%')[3].split('=')[1]
-			   max_unroll=max_to(s,max_unroll)	
-			   
- 		if l.find("TO=False")>0:
-			   max_unroll=max_to(s,max_unroll)
-			   s=l.split('%')[3].split('=')[1]
-			   max_unroll=s
-	#cantidad de estados a reparar
-        cantidad_de_estados=states 
+	 	for l in resto:
+			if l.find("state=")>0:	
+				   states=states+1
+				   flag_wac_1=False
+			           flag_wac=False 
+
+			if l.find("wac_nro=1")>0 and not flag_wac_1:
+				   s=l.split('%')
+				   n=int(s[1].strip().split("=")[1])
+				   sattime=s[2].strip().split("=")[1].strip()
+		                   cant_wac1=cant_wac1+1
+		                   suma_sattime_w1=sumar_hora(sattime,suma_sattime_w1)  
+				   
+				   flag_wac_1=True
 	
-	#maximo unrol alcanzado
-	maximo_unroll_alcanzado= int(max_unroll) 
+	 		if l.find("wac_nro=")>0:
+				   s=l.split('%')
+				   n=int(s[1].strip().split("=")[1])
+				   sattime=s[2].strip().split("=")[1].strip()
 
-	# en el tiempo especificado en config.file
-        cantidad_total_de_wac_encontrados=cant_wacs
+		                   suma_sattime_w=sumar_hora(sattime,suma_sattime_w)  
+
+				   cant_wacs=cant_wacs+1
+
+	 		if l.find("TO=True")>0:
+				   cant_to=cant_to+1
+				   s=l.split('%')[3].split('=')[1]
+				   max_unroll=max_to(s,max_unroll)	
+				   
+	 		if l.find("TO=False")>0:
+				   max_unroll=max_to(s,max_unroll)
+				   s=l.split('%')[3].split('=')[1]
+				   max_unroll=s
+		#cantidad de estados a reparar
+		cantidad_de_estados=states 
+		#print cantidad_de_estados
+		#maximo unrol alcanzado
+		maximo_unroll_alcanzado= int(max_unroll) 
+
+		# en el tiempo especificado en config.file
+		cantidad_total_de_wac_encontrados=cant_wacs
 
 	
 
-	#tiempo total de sattime utilizado 
-        tiempo_total_sat= suma_sattime_w
+		#tiempo total de sattime utilizado 
+		tiempo_total_sat= suma_sattime_w
+		#print tiempo_total_sat
+		#tiempo total de sat insumido para encontrar el wac 1 
+		tiempo_total_sat_wac1 = suma_sattime_w1
 
-	#tiempo total de sat insumido para encontrar el wac 1 
-        tiempo_total_sat_wac1 = suma_sattime_w1
-
-	#promedio del sattime insumido para los primeros wacs. se promedian con la cantidad de los wacs1 encontrados
-	if cant_wac1>0:
-		tiempo_promedio_sattime_w1=str(millis_to_seconds(float(hora_to_millis(suma_sattime_w1))/cant_wac1))
-	else:
-		tiempo_promedio_sattime_w1='-1'
+		#promedio del sattime insumido para los primeros wacs. se promedian con la cantidad de los wacs1 encontrados
+		if cant_wac1>0:
+			tiempo_promedio_sattime_w1=str(millis_to_seconds(float(hora_to_millis(suma_sattime_w1))/cant_wac1))
+		else:
+			tiempo_promedio_sattime_w1='-1'
 
 
-	#prmomedio del sattime general
-        cantidad_total_to=cant_to
-        
-	if cantidad_total_de_wac_encontrados >0:
-		tiempo_promedio_sattime_w=str(millis_to_seconds(float(hora_to_millis(suma_sattime_w))/cant_wacs))
-	else:
-		tiempo_promedio_sattime_w1='-1'
-	print 'Action='+name_action +' | States='+str(cantidad_de_estados)+' | '+'Total Sat Time='+tiempo_total_sat+' | Avg.Time WAC='+tiempo_promedio_sattime_w +' seconds | #WAC found in TIME='+str(cantidad_total_de_wac_encontrados) + ' | AVG. Time First='+ str(tiempo_promedio_sattime_w1)+' seconds | #TO='+str(cantidad_total_to)+' | MaxUnroll='+max_unroll
+		#prmomedio del sattime general
+		cantidad_total_to=cant_to
+		
+		if cantidad_total_de_wac_encontrados >0:
+			tiempo_promedio_sattime_w=str(millis_to_seconds(float(hora_to_millis(suma_sattime_w))/cant_wacs))
+		else:
+			tiempo_promedio_sattime_w1='-1'
+		print 'Action='+name_action +' | States='+str(cantidad_de_estados)+' | '+'Total Sat Time='+tiempo_total_sat+' | Avg.Time WAC='+tiempo_promedio_sattime_w +' seconds | #WAC found in TIME='+str(cantidad_total_de_wac_encontrados) + ' | AVG. Time First='+ str(tiempo_promedio_sattime_w1)+' seconds | #TO='+str(cantidad_total_to)+' | MaxUnroll='+max_unroll
 
 
 
@@ -739,8 +751,10 @@ cut -d "=" -f 2  b > c
 def ff(ur,n,st,res,time,cwpu):
 	 if ur==n:
 	    st=st+time
+	    res=res.strip()
 	    if res=='WAP':
-		cwpu=cwpu+1 
+		cwpu=cwpu+1
+
          return st,cwpu
 
 
@@ -752,120 +766,133 @@ def ff(ur,n,st,res,time,cwpu):
 def procesar_logfile_permanente():
         os.system('grep "wac-wap\|action_name\|sat_time\|timeout_sal" logfile_wap.log > a ;cut -d "%" -f 2  a  > b ; sed -e "s/timeout_sal://g" b > c; sed -e "s/sat_time=//g" c > d')
 	f=open("d","r")
-	lines = f.readlines()
+	lines = f.read()
 	f.close()
-	#CANT WAP Y WAC FOR UNROLLS
-        cwpu1,cwpu2,cwpu3,cwpu4,cwpu5,cwpu6,cwpu7,cwpu8,cwpu9,cwpu10=0,0,0,0,0,0,0,0,0,0
-        cwcu1,cwcu2,cwcu3,cwcu4,cwcu5,cwcu6,cwcu7,cwcu8,cwcu9,cwcu10=0,0,0,0,0,0,0,0,0,0
-	#SAT TIME FOR UNROLLS
-	st1,st2,st3,st4,st5,st6,st7,st8,st9,st10=0,0,0,0,0,0,0,0,0,0
-	#TIEMPOS MINIMOS
-	tmin=999999999
-	#TO  FOR UNROLLS
-	to1,to2,to3,to4,to5,to6,to7,to8,to9,to10=0,0,0,0,0,0,0,0,0,0
-	ur=-1
-	ant=False
-	for l in lines:
-	    l=l[:-1]
-	    h=l.find('action_name')
-	    if h>=0:
-		action= l[h:len(l)-1]
-	    h=l.find('unroll')
-	    if h>0:
-		#ur indica el unroll
-		ur = int(l.split(':')[2])
-		cant= int(l.split(':')[1].split(' ')[0])
-		if ur==1:
-		      cwcu1=cwcu1+cant
-		if ur==2:
-		      cwcu2=cwcu2+cant
-		if ur==3:
-		      cwcu3=cwcu3+cant
-		if ur==4:
-		      cwcu4=cwcu4+cant
-		if ur==5:
-		      cwcu5=cwcu5+cant
-		if ur==6:
-		      cwcu6=cwcu6+cant
-		if ur==7:
-		      cwcu7=cwcu7+cant
-		if ur==8:
-		      cwcu8=cwcu8+cant
-		if ur==9:
-		      cwcu9=cwcu9+cant
-		if ur==10:
-		      cwcu10=cwcu10+cant
-	    if l.find('WAP')>=0 or l.find('NOT')>=0:
-		      s=l.strip()
-		      part=s.split(' ')
-		      res=part[0].strip()
-		      time=int(part[1])
-		      if tmin>time:
-				tmin=time
-                      st1,cwpu1=ff(ur,1,st1,res,time,cwpu1)
-                      st2,cwpu2=ff(ur,2,st2,res,time,cwpu2)
-		      st3,cwpu3=ff(ur,3,st3,res,time,cwpu3)
-                      st4,cwpu4=ff(ur,4,st4,res,time,cwpu4)
-                      st5,cwpu5=ff(ur,5,st5,res,time,cwpu5)
-                      st6,cwpu6=ff(ur,6,st6,res,time,cwpu6)
-		      st7,cwpu7=ff(ur,7,st7,res,time,cwpu7)
-                      st8,cwpu8=ff(ur,8,st8,res,time,cwpu8)
-                      st9,cwpu9=ff(ur,9,st9,res,time,cwpu9)
-                      st10,cwpu10=ff(ur,10,st10,res,time,cwpu10)
-    	    if l.find('True')>=0:
-	    	      if ur==1:
-	    			to1=to1+1	
-	    	      if ur==2:
-	    			to2=to2+1
-	    	      if ur==3:
-	    			to3=to3+1
-	    	      if ur==4:
-	    			to4=to4+1
-	    	      if ur==5:
-	    			to5=to5+1
-	    	      if ur==6:
-	    			to6=to6+1
-	    	      if ur==7:
-	    			to7=to7+1
-	    	      if ur==8:
-	    			to8=to8+1
-	    	      if ur==9:
-	    			to9=to9+1
-	    	      if ur==10:
-	    			to10=to10+1
-	if cwpu1>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap1:"+str(cwpu1)+" | avg sattime wap1:"+str(float(st1/cwpu1))+" | TO:"+str(to1)	
-	if cwpu2>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap2:"+str(cwpu2)+" | avg sattime wap2:"+str(float(st2/cwpu2))+" | TO:"+str(to2)
-	if cwpu3>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap3:"+str(cwpu3)+" | avg sattime wap3:"+str(float(st3/cwpu3))+" | TO:"+str(to3)
-	if cwpu4>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap4:"+str(cwpu4)+" | avg sattime wap4:"+str(float(st4/cwpu4))+" | TO:"+str(to4)
-	if cwpu5>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap5:"+str(cwpu5)+" | avg sattime wap5:"+str(float(st5/cwpu5))+" | TO:"+str(to5)
-	if cwpu6>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap6:"+str(cwpu6)+" | avg sattime wap6:"+str(float(st6/cwpu6))+" | TO:"+str(to6)
-	if cwpu7>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap7:"+str(cwpu7)+" | avg sattime wap7:"+str(float(st7/cwpu7))+" | TO:"+str(to7)
-	if cwpu8>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap8:"+str(cwpu8)+" | avg sattime wap8:"+str(float(st8/cwpu8))+" | TO:"+str(to8)
-	if cwpu9>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap9:"+str(cwpu9)+" | avg sattime wap9:"+str(float(st9/cwpu9))+" | TO:"+str(to9)
-	if cwpu10>0:
-		print "Min. sat time:"+str(tmin)
-		print "accion:"+action+" | #wap10:"+str(cwpu10)+" | avg sattime wap10:"+str(float(st10/cwpu10))+" | TO:"+str(to10)
+	lineas=lines.split("action")
+	for elem in lineas:
+	  if elem.find("_name")>=0:
+                
+		#CANT WAP Y WAC FOR UNROLLS
+		cwpu1,cwpu2,cwpu3,cwpu4,cwpu5,cwpu6,cwpu7,cwpu8,cwpu9,cwpu10=0,0,0,0,0,0,0,0,0,0
+		cwcu1,cwcu2,cwcu3,cwcu4,cwcu5,cwcu6,cwcu7,cwcu8,cwcu9,cwcu10=0,0,0,0,0,0,0,0,0,0
+		#SAT TIME FOR UNROLLS
+		st1,st2,st3,st4,st5,st6,st7,st8,st9,st10=0,0,0,0,0,0,0,0,0,0
+		#TIEMPOS MINIMOS
+		tmin=999999999
+		#TO  FOR UNROLLS
+		to1,to2,to3,to4,to5,to6,to7,to8,to9,to10=0,0,0,0,0,0,0,0,0,0
+		ur=-1
+		ant=False
+                ll=elem.split('\n')
+		for l in ll:
+		    #l=l[:-1]
+		    h=l.find('_name')
+		    if h>=0:
 
+			action= l[h:len(l)]
+			print '>>>'+action
+		    h=l.find('unroll')
+		    if h>0:
+			#ur indica el unroll
+		        
+			ur = int(l.split(':')[2])
+		        #print ur
 
+			#print 'cant '+ str(l.split(':')[1].split(' ')[0])
 
+			cant= int(l.split(':')[1].split(' ')[0])
+			if ur==1:
+			      cwcu1=cwcu1+cant
+			if ur==2:
+			      cwcu2=cwcu2+cant
+			if ur==3:
+			      cwcu3=cwcu3+cant
+			if ur==4:
+			      cwcu4=cwcu4+cant
+			if ur==5:
+			      cwcu5=cwcu5+cant
+			if ur==6:
+			      cwcu6=cwcu6+cant
+			if ur==7:
+			      cwcu7=cwcu7+cant
+			if ur==8:
+			      cwcu8=cwcu8+cant
+			if ur==9:
+			      cwcu9=cwcu9+cant
+			if ur==10:
+			      cwcu10=cwcu10+cant
+		    if l.find('WAP')>=0 or l.find('NOT')>=0:
+			      s=l.strip()
+			      part=s.split(' ')
+			      res=part[0].strip()
+			      time=int(part[1])
+			      if tmin>time:
+					tmin=time
+			      
+		              st1,cwpu1=ff(ur,1,st1,res,time,cwpu1)
+			      st2,cwpu2=ff(ur,2,st2,res,time,cwpu2)
+			      st3,cwpu3=ff(ur,3,st3,res,time,cwpu3)
+		              st4,cwpu4=ff(ur,4,st4,res,time,cwpu4)
+		              st5,cwpu5=ff(ur,5,st5,res,time,cwpu5)
+		              st6,cwpu6=ff(ur,6,st6,res,time,cwpu6)
+			      st7,cwpu7=ff(ur,7,st7,res,time,cwpu7)
+		              st8,cwpu8=ff(ur,8,st8,res,time,cwpu8)
+		              st9,cwpu9=ff(ur,9,st9,res,time,cwpu9)
+		              st10,cwpu10=ff(ur,10,st10,res,time,cwpu10)
+	    	    if l.find('True')>=0:
+		    	      if ur==1:
+		    			to1=to1+1	
+		    	      if ur==2:
+		    			to2=to2+1
+		    	      if ur==3:
+		    			to3=to3+1
+		    	      if ur==4:
+		    			to4=to4+1
+		    	      if ur==5:
+		    			to5=to5+1
+		    	      if ur==6:
+		    			to6=to6+1
+		    	      if ur==7:
+		    			to7=to7+1
+		    	      if ur==8:
+		    			to8=to8+1
+		    	      if ur==9:
+		    			to9=to9+1
+		    	      if ur==10:
+		    			to10=to10+1
+		if cwpu1>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap1:"+str(cwpu1)+" | avg sattime wap1:"+str(float(st1/cwpu1))+" | TO:"+str(to1)	
+		if cwpu2>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap2:"+str(cwpu2)+" | avg sattime wap2:"+str(float(st2/cwpu2))+" | TO:"+str(to2)
+		if cwpu3>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap3:"+str(cwpu3)+" | avg sattime wap3:"+str(float(st3/cwpu3))+" | TO:"+str(to3)
+		if cwpu4>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap4:"+str(cwpu4)+" | avg sattime wap4:"+str(float(st4/cwpu4))+" | TO:"+str(to4)
+		if cwpu5>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap5:"+str(cwpu5)+" | avg sattime wap5:"+str(float(st5/cwpu5))+" | TO:"+str(to5)
+		if cwpu6>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap6:"+str(cwpu6)+" | avg sattime wap6:"+str(float(st6/cwpu6))+" | TO:"+str(to6)
+		if cwpu7>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap7:"+str(cwpu7)+" | avg sattime wap7:"+str(float(st7/cwpu7))+" | TO:"+str(to7)
+		if cwpu8>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap8:"+str(cwpu8)+" | avg sattime wap8:"+str(float(st8/cwpu8))+" | TO:"+str(to8)
+		if cwpu9>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap9:"+str(cwpu9)+" | avg sattime wap9:"+str(float(st9/cwpu9))+" | TO:"+str(to9)
+		if cwpu10>0:
+			print "Min. sat time:"+str(tmin)
+			print "accion:"+action+" | #wap10:"+str(cwpu10)+" | avg sattime wap10:"+str(float(st10/cwpu10))+" | TO:"+str(to10)
+
+		#print 'se analizo '+action
+		
 
 
 
@@ -874,7 +901,7 @@ def procesar_logfile_permanente():
 
 
   
-procesar_logfile()
+#procesar_logfile()
 print '======================================='
 procesar_logfile_permanente()
 
