@@ -1,0 +1,51 @@
+
+
+
+
+
+pred pre_retainall[values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)]
+{sequence[values]
+}
+
+
+
+pred pos_retainall
+[
+  vac:boolean,vac':boolean,
+  size:JavaPrimitiveIntegerValue,size':JavaPrimitiveIntegerValue,
+  col:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null),
+  values':JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)
+]
+{
+	((no values') implies (vac=true)) and 
+	(not (no values') implies (vac=false)) and         
+        myseq_card[values,size] and 
+       
+        (all a,b:JavaPrimitiveIntegerValue | ((a->b) in values') implies (not(no col.b) and not(no values.b))) and 
+         
+	
+    aca
+
+
+vac'=false and myseq_card[values,size]
+        pred_java_primitive_integer_value_add[size,i321,size',true] and
+	pred_java_primitive_integer_value_eq[indice,indice'] and 
+	pred_java_primitive_integer_value_eq[elem,elem'] and 
+	sequence[values] and 
+        (indice->elem) in values' and
+        (all a,b:JavaPrimitiveIntegerValue | (a->b) in values implies (
+	(pred_java_primitive_integer_value_lt[a,indice] implies  (a->b) in values' ) and
+	(pred_java_primitive_integer_value_gt[a,indice] implies  (fun_java_primitive_integer_value_add[a,i321]->b) in values' )
+        )) and JavaPrimitiveIntegerValue.values'= JavaPrimitiveIntegerValue.values + elem
+}
+
+
+
+
+act stack_addIndexItem_action[/*inout*/vac:boolean,/*inout*/size:JavaPrimitiveIntegerValue,/*in*/intJ_1:JavaPrimitiveIntegerValue,/*in*/intJ_2:JavaPrimitiveIntegerValue,/*inout*/thisType_1:JavaPrimitiveIntegerValue->(JavaPrimitiveIntegerValue+Null)] {  
+   pre { pre_add2[size,intJ_1,thisType_1] }
+   post { pos_add2[vac,vac',size,size',intJ_1,intJ_1',intJ_2,intJ_2',thisType_1,thisType_1'] }
+}/*scope:1*/
+
+
